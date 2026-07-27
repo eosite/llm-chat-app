@@ -12,6 +12,7 @@ export interface Env {
 	 * Binding for static assets.
 	 */
 	ASSETS: { fetch: (request: Request) => Promise<Response> };
+	DEFAULT_MODEL: string; // 模型环境变量
 }
 
 /**
