@@ -7,11 +7,11 @@
  *
  * @license MIT
  */
-import { Env, ChatMessage } from "./types";
+import type { Env, ChatMessage } from "./types";
 
-// Model ID for Workers AI model
+// Fallback model ID for Workers AI
 // https://developers.cloudflare.com/workers-ai/models/
-const MODEL_ID = Env.DEFAULT_MODEL || "@cf/meta/llama-3.1-8b-instruct-fp8";
+const FALLBACK_MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
 
 // Default system prompt
 const SYSTEM_PROMPT =
@@ -73,7 +73,8 @@ async function handleChatRequest(
 			stream: true,
 		} satisfies AiTextGenerationInput & { stream: true };
 
-		const stream = await env.AI.run<typeof MODEL_ID>(MODEL_ID, inputs, {
+		const modelId = env.DEFAULT_MODEL || FALLBACK_MODEL_ID;
+		const stream = await env.AI.run(modelId, inputs, {
 			// Uncomment to use AI Gateway
 			// gateway: {
 			//   id: "YOUR_GATEWAY_ID", // Replace with your AI Gateway ID
